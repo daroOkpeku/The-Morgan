@@ -1,10 +1,10 @@
    <!-- Top Bar Start -->
-            <div class="topbar">            
+            <div class="topbar">
                 <!-- Navbar -->
-                <nav class="navbar-custom">    
-                    <ul class="list-unstyled topbar-nav float-end mb-0">  
-                                          
-            
+                <nav class="navbar-custom">
+                    <ul class="list-unstyled topbar-nav float-end mb-0">
+
+
                         <li class="dropdown notification-list">
                             <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-haspopup="false" aria-expanded="false">
@@ -12,10 +12,10 @@
                                 <span class="badge bg-danger rounded-pill noti-icon-badge">@if(isset($notify)){{count($notify)}} @else 0 @endif</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
-                            
+
                                 <h6 class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
                                     Notifications <span class="badge bg-primary rounded-pill">@if(isset($notify)){{count($notify)}} @else 0 @endif</span>
-                                </h6> 
+                                </h6>
                                 <div class="notification-menu" data-simplebar>
                                 <!--end-item-->
                                     <!-- item-->
@@ -25,7 +25,7 @@
                                         <small class="float-end text-muted ps-2">{{$ss->created_at->DiffForHumans()}}</small>
                                         <div class="media">
                                             <div class="avatar-md bg-soft-primary">
-                                                <i class="las la-user-clock bg-soft-primary thumb-sm rounded-circle"></i>  
+                                                <i class="las la-user-clock bg-soft-primary thumb-sm rounded-circle"></i>
                                             </div>
                                             <div class="media-body align-self-center ms-2 text-truncate">
                                                 <h6 class="my-0 fw-normal text-dark">{{$ss->title}}</h6>
@@ -44,9 +44,9 @@
                              <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-haspopup="false" aria-expanded="false">
                                 <span class="ms-1 nav-user-name hidden-sm ">{{strtoupper(auth()->user()->name)}}</span>
-                                  
-                                     <img src="{{asset('/assets/images/'.$profile_image)}}"  width="45px" height="50px" alt="logo-large" class="rounded-circle"> 
-                                                 
+
+                                     {{--  <img src="{{asset('/assets/images/'.$profile_image)}}"  width="45px" height="50px" alt="logo-large" class="rounded-circle">   --}}
+
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="{{route('user.profile')}}"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
@@ -59,23 +59,24 @@
                                                 </div>
                         </li>
                     </ul><!--end topbar-nav-->
-        
-                    <ul class="list-unstyled topbar-nav mb-0">                        
+
+                    <ul class="list-unstyled topbar-nav mb-0">
                         <li>
                             <button class="nav-link button-menu-mobile">
                                 <i data-feather="menu" class="align-self-center topbar-icon"></i>
                             </button>
-                        </li> 
+                        </li>
                         <li class="creat-btn">
                             <div class="nav-link">
                                 <a class=" btn btn-sm btn-soft-primary" href="#" role="button">Client Dashboard</a>
-                            </div>                                
-                        </li>  
+                            </div>
+                        </li>
                         <li class="creat-btn">
                             <div class="nav-link">
-                                <a class=" btn btn-sm btn-soft-primary" >Wallet Balance: ₦{{number_format($client_balance->avail_balance,2)}}</a>
-                            </div>                                
-                        </li>                          
+
+                                {{--  <a class=" btn btn-sm btn-soft-primary" >Wallet Balance: ₦{{number_format($client_balance->avail_balance,2)}}</a>  --}}
+                            </div>
+                        </li>
                     </ul>
                 </nav>
                 <!-- end navbar-->

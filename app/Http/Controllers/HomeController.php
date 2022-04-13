@@ -19,6 +19,7 @@ use App\Models\IdentityVerificationDetail;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Session;
 use App\Models\FundRequest;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -43,15 +44,23 @@ class HomeController extends Controller
             if(auth()->user()->user_type == 6)
             return redirect()->route('admin.index');
         }
-    
+        public function steve(){
+            return view('users.steve');
+        }
+
     public function Home()
     {
+        $today =  Carbon::now();
+        $month =   $today->format('M');
+         $day =  $today->format('d');
+         $fullday = $day." ".$month;
         $this->RedirectUser();
         $user = auth()->user();
-        if($user->user_type == 1){   
+        if($user->user_type == 1){
         $service = CandidateVerification::where('user_id', $user->id)->get();
         return view('users.onboarding.uploads', compact('service', $service));
         }
+
         $data['success'] = IdentityVerification::where(['status'=>'successful',  'user_id'=> $user->id])->get();
         $data['failed'] = IdentityVerification::where(['status'=>'failed', 'user_id'=> $user->id])->get();
         $data['pending'] = IdentityVerification::where(['status'=>'pending', 'user_id'=> $user->id])->get();
@@ -60,7 +69,7 @@ class HomeController extends Controller
         $data['recents'] = IdentityVerification::where(['user_id' => $user->id])->latest()->take(5)->get();
         $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->take(5)->get();
         $data['activity'] = ActivityLog::where('user_id', $user->id)->take(10)->get();
-        return view('users.home', $data);
+        return view('users.home', ["success"=>$data['success'], "failed"=>$data['failed'], "pending"=>$data['pending'], "logs"=> $data['logs'], "recents"=>$data['recents'],  "transactions"=>$data['transactions'], "activity"=>$data['activity'], "fulldate"=>$fullday]);
     }
 
     public function GetData()
@@ -80,7 +89,7 @@ class HomeController extends Controller
         $data['pending'] = IdentityVerification::where(['status'=>'pending', 'verification_id'=>$slug->id, 'user_id'=> $user->id])->get();
         $data['fields'] = FieldInput::where(['slug'=>$slug->slug])->get();
         $data['wallet']= Wallet::where('user_id', $user->id)->first();
-       // $data['verified'] = IdentityVerificationDetail::where(['user_id'=>$user->id])->latest()->first();           
+       // $data['verified'] = IdentityVerificationDetail::where(['user_id'=>$user->id])->latest()->first();
         $data['logs'] = IdentityVerification::where(['user_id' => $user->id, 'verification_id'=>$slug->id])->latest()->get();
         return view('users.individual.identityVerify', $data);
     }
@@ -98,7 +107,7 @@ class HomeController extends Controller
         $data['pending'] = IdentityVerification::where(['status'=>'pending', 'verification_id'=>$slug->id, 'user_id'=> $user->id])->get();
         $data['fields'] = FieldInput::where(['slug'=>$slug->slug])->get();
         $data['wallet']= Wallet::where('user_id', $user->id)->first();
-        $data['verified'] = IdentityVerificationDetail::where(['first_name'=>'IBIYEMI'])->latest()->first();           
+        $data['verified'] = IdentityVerificationDetail::where(['first_name'=>'IBIYEMI'])->latest()->first();
         $data['logs'] = IdentityVerification::where(['user_id' => $user->id, 'verification_id'=>$slug->id])->latest()->get();
         return $data;
     }
@@ -117,7 +126,7 @@ class HomeController extends Controller
             Session::flash('message', 'Wallet top-up completed successfully');
             return redirect()->back();
         }
-        
+
     $user = User::where('id', auth()->user()->id)->first();
        $funds =  FundRequest::create([
             'user_id' => $user->id,
@@ -145,9 +154,9 @@ class HomeController extends Controller
             "Content-Type: application/json",
             "Authorization: Bearer ".$this->API_Token
         ));
-        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         $se = curl_exec($cURLConnection);
-        curl_close($cURLConnection);  
+        curl_close($cURLConnection);
         $resp = json_decode($se, true);
 
       // dd($resp);
@@ -161,7 +170,7 @@ class HomeController extends Controller
         $custemail = $resp['data']['customer']['email'];
         $payment_id = $resp['data']['tx_ref'];
         $external_ref = $resp['data']['flw_ref'];
-        if (($chargeResponsecode == "success")) {     
+        if (($chargeResponsecode == "success")) {
             //Give Value and return to Success page
             $transactionRef = $this->GenerateRef();
             $getUser = User::where('email', $custemail)->first();
@@ -176,7 +185,7 @@ class HomeController extends Controller
                 'external_ref'=>$external_ref,
                 'amount'=>$chargeAmount,
                 'prev_balance' =>$wallet->avail_balance,
-                'avail_balance' => $ownerNewBalance 
+                'avail_balance' => $ownerNewBalance
             ]);
 
             ActivityLog::create([
@@ -185,9 +194,9 @@ class HomeController extends Controller
                 'ip_address' => $request->Ip(),
                 'user_agent' => $request->UserAgent(),
             ]);
-            
+
             return response()->json($se);
-          
+
         } else {
             return response()->json($se);
         }
@@ -204,7 +213,7 @@ class HomeController extends Controller
         $id = $request->verification_id;
         $user = User::where('id', auth()->user()->id)->first();
         $verify = Verification::where('id', decrypt($id))->first();
-       
+
         if($verify->report_type == 'business'){
             $reports = BusinessVerification::where(['slug' => $verify->slug, 'user_id'=>$user->id])->latest()->get();
             return redirect()->back()
@@ -214,9 +223,9 @@ class HomeController extends Controller
             return redirect()->back()
                 ->with('reports', $reports);
         }else{
-           
+
             $reports = IdentityVerification::where(['verification_id' => $verify->id, 'user_id'=>$user->id])->latest()->get();
-          
+
             return view('users.reports.reports')
                     ->with('verifications', Verification::get())
                 ->with('reports', $reports);
@@ -276,9 +285,9 @@ class HomeController extends Controller
             'oldPassword' => 'required',
             'password' => 'required|min:6|confirmed',
             ]);
-     
+
            $hashedPassword = auth()->user()->password;
-            
+
             if (Hash::check($request->oldPassword , $hashedPassword)) {
             if (!Hash::check($request->password , $hashedPassword)) {
                   $users =user::find(Auth()->user()->id);

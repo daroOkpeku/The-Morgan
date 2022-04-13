@@ -24,7 +24,9 @@
 
     <!--favicon icon-->
     <link rel="shortcut icon" href="{{asset('/assets/images/favicon.png')}}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+    rel="stylesheet" href="./fontawesome-free-5.12.0-web/css/all.min.css" />
     <!--google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700%7COpen+Sans:400,600&amp;display=swap" rel="stylesheet">
 
@@ -52,7 +54,7 @@
 <body>
 
 <!--loader start-->
-{{--  <div id="preloader">
+<div id="preloader">
     <div class="loader1">
         <span></span>
         <span></span>
@@ -60,7 +62,7 @@
         <span></span>
         <span></span>
     </div>
-</div>  --}}
+</div>
 <!--loader end-->
 
 @include('partials.landing')

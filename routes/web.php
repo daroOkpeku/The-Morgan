@@ -41,10 +41,11 @@ Route::get('/technology', [LandingPages::class, 'Technology'])->name('technology
 Route::get('/industry', [LandingPages::class, 'Industry'])->name('industry');
 Route::get('/resources', [LandingPages::class, 'Resources'])->name('resource');
 Route::post('/contact/form', [LandingPages::class, 'ContactForm'])->name('ContactForm');
+Route::get('/stevepage', [HomeController::class, 'steve']);
 #===================== USERS ROUTE ===============================
 Route::middleware('auth')->group(function() {
-Route::get('/dashboard', [HomeController::class, 'Home'])->name('index');
-Route::get('/home', [HomeController::class, 'Home'])->name('home');
+    Route::get('/dashboard', [HomeController::class, 'Home'])->name('index');
+    Route::get('/home', [HomeController::class, 'Home'])->name('home');
 Route::get('/user/identities/check/{slug}', [HomeController::class, 'VerifyIndex'])->name('verifyIndex');
 Route::post('/user/identities/verify/{slug}', [IdentityController::class, 'StoreVerify'])->name('StoreVerify');
 Route::get('/test', [IdentityController::class, 'test']);
@@ -76,7 +77,7 @@ Route::post('/user/sort/identity/data/{slug}', [IdentityController::class, 'Iden
 });
 
 #====================ADMIN ROUTES ============================
-Route::middleware('admin')->prefix('admin')->group( function() { 
+Route::middleware('admin')->prefix('admin')->group( function() {
 Route::get('/', [AdminController::class, 'Index'])->name('admin.index');
 Route::get('/index', [AdminController::class, 'Index'])->name('admin.index');
 Route::get('/identity/{slug}', [AdminController::class, 'getVerify'])->name('admin.verify');
